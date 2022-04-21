@@ -1,6 +1,7 @@
 ARG OPENJDK_TAG=11
+ARG SBT_TAG=latest
 
-FROM sbt:latest AS build
+FROM sbt:${SBT_TAG} AS build
 
 # build arguments that must be supplied during the build, as environment variables
 ARG ACCOUNT=account
