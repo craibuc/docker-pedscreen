@@ -59,4 +59,5 @@ $ make run
 
 ## References
 
-- https://github.com/chop-dbhi/ped-screen
+- [ped-screen source](https://github.com/chop-dbhi/ped-screen)
+- [docker-sbt](https://github.com/craibuc/docker-sbt)
