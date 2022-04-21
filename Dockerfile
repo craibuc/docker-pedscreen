@@ -2,17 +2,19 @@ ARG OPENJDK_TAG=11
 
 FROM sbt:latest AS build
 
+# build arguments that must be supplied during the build, as environment variables
 ARG ACCOUNT=account
 ARG TOKEN=token
 ARG BRANCH=branch
-
+# interpolate value
 ARG URI="https://$ACCOUNT:$TOKEN@github.com/chop-dbhi/ped-screen"
 
 WORKDIR /source
 
-# copy source to image
+# clone the remote repository's branch to /source
 RUN git clone $URI -b $BRANCH .
 
+# to be removed
 COPY ./*.properties ./conf/local
 
 # create "fat" .JAR file
