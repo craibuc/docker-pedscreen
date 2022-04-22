@@ -4,6 +4,7 @@
 # docker
 .dockerignore
 Dockerfile*
+docker-compose*
 
 # make
 Makefile
@@ -11,3 +12,9 @@ Makefile
 # misc
 LICENSE
 README.md
+
+# bash
+serial*
+
+# postgres
+postgres/*
