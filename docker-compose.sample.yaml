@@ -65,10 +65,10 @@ x-database: &database
 x-application: &application
     image: pedscreen:latest
     env_file:
-        - ./pedscreen/.env
+        - ./.env
     volumes:
         # mount host directory to container
-        - /mnt/c/Users/[user name]/Desktop/output:/app/output
+        - /mnt/c/Users/[user name]/output:/app/output
 
         # use a shared volume (defined late in this document)
         # - pedscreen:/app/output
