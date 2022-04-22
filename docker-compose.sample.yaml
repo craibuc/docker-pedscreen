@@ -1,0 +1,153 @@
+#
+# Configuration
+#
+
+# make a copy of this file and call it docker-compose.yaml
+
+# make a copy of ./pedscreen/.env.sample and call it .env; supply valid values
+
+# make a copy of ./postgres/.env.sample and call it .env; supply valid values
+
+# make a copy of ./postgres/initdb/initdb.sample.sql and call it initdb.sql; edit file to add password
+
+# review volumes setting in this file
+
+# review the app and db sections in this file
+
+# add or remove app and db setions as needed
+
+#
+# Usage
+#
+
+# export environment variables
+# $ export DATE_START=2021/03/01
+# $ export DATE_END=2021/03/31
+
+# list all environment variables (for validation)
+# $ printevn
+
+# start all containers
+# $ docker-compose up -d
+
+# monitor the logs, optionally supplying the name of the service to filter the logs
+# $ docker-compose logs -f [db0|app0]
+
+# stop and remove all containers and network
+# $ docker-compose down
+
+version: "3.7"
+
+#
+# define the 'base' database which will be referenced by each instance
+#
+
+x-database: &database
+    image: postgres:9.6.22
+    env_file:
+        - ./postgres/.env
+    healthcheck:
+        # test: [ "CMD", "pg_isready", "-q", "-d", "${DATABASE_NAME}", "-U", "${DATABASE_USER}" ]
+        # ensure that the database is ready for usage by the application
+        test: [ "CMD", "pg_isready", "-q", "-d", "pedscreen", "-U", "pedscreen" ]
+        timeout: 45s
+        interval: 10s
+        retries: 10
+    volumes:
+        # copy the DB-initialization script (./initdb.sql) to the container
+        - ./postgres/initdb/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    restart: unless-stopped
+
+#
+# define the 'base' application which will be referenced by each instance
+#
+
+x-application: &application
+    image: pedscreen:latest
+    env_file:
+        - ./pedscreen/.env
+    volumes:
+        # mount host directory to container
+        - /mnt/c/Users/[user name]/Desktop/output:/app/output
+
+        # use a shared volume (defined late in this document)
+        # - pedscreen:/app/output
+
+services:
+
+    #
+    # database instances
+    #
+
+    db0:
+        <<: *database
+        container_name: "db-a"
+        ports:
+            - 10000:5432 # access this instance from workstation jdbc:postgresql://db0:10000/pedscreen
+    db1:
+        <<: *database
+        container_name: "db-b"
+        ports:
+            - 20000:5432 # access this instance from workstation jdbc:postgresql://db1:20000/pedscreen
+
+    db2:
+        <<: *database
+        container_name: "db-c"
+        ports:
+            - 30000:5432 # access this instance from workstation jdbc:postgresql://db2:30000/pedscreen
+
+    #
+    # application instances
+    #
+
+    app0:
+        <<: *application
+        container_name: "app-a"
+        # values for DATE_START and DATE_END are supplied by environment variables
+        command: ["--location_id","AAAA","--department_id","111111","--date_start","${DATE_START}","--date_end","${DATE_END}"]
+        environment:
+            - POSTGRES_URI=jdbc:postgresql://db0:5432/pedscreen
+        depends_on:
+            db0:
+                condition: service_healthy
+
+    app1:
+        <<: *application
+        container_name: "app-b"
+        # values for DATE_START and DATE_END are supplied by environment variables
+        command: ["--location_id","BBBB","--department_id","222222","--date_start","${DATE_START}","--date_end","${DATE_END}"]
+        environment:
+            - POSTGRES_URI=jdbc:postgresql://db1:5432/pedscreen
+        depends_on:
+            db1:
+                condition: service_healthy
+
+    app2:
+        <<: *application
+        container_name: "app-c"
+        # values for DATE_START and DATE_END are supplied by environment variables
+        command: ["--location_id","CCCC","--department_id","333333","--date_start","${DATE_START}","--date_end","${DATE_END}"]
+        environment:
+            - POSTGRES_URI=jdbc:postgresql://db2:5432/pedscreen
+        depends_on:
+            db2:
+                condition: service_healthy
+
+    #
+    # container w/ PSQL and access to data volume (for testing purposes)
+    #
+
+    # psql:
+    #     image: psql:latest
+    #     container_name: "psql"
+    #     env_file:
+    #         - ./pedscreen.env
+    #     stdin_open: true # docker run -i
+    #     tty: true        # docker run -t
+    #     volumes:
+    #         - /mnt/c/Users/[username]/Desktop/:/app/output
+            # - pedscreen:/app/output
+
+# volumes:
+#   pedscreen:
+#     external: true

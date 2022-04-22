@@ -1,2 +1,7 @@
+# docker-related
 .env
 !.env.sample
+initdb.sql
+!initdb.sample.sql
+docker-compose.yaml
+!.docker-compose.yaml
