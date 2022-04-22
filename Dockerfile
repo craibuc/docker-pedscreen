@@ -1,7 +1,7 @@
-ARG OPENJDK_TAG=11
+ARG OPENJDK_TAG=11.0.13
 ARG SBT_TAG=latest
 
-FROM sbt:${SBT_TAG} AS build
+FROM mozilla/sbt:${SBT_TAG} AS build
 
 # build arguments that must be supplied during the build, as environment variables
 ARG ACCOUNT=account
