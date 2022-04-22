@@ -5,3 +5,5 @@ initdb.sql
 !initdb.sample.sql
 docker-compose.yaml
 !.docker-compose.yaml
+serial.sh
+!serial.sample.sh
