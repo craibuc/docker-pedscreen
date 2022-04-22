@@ -16,7 +16,7 @@ build:
 	.
 
 tty:
-	docker run -it --rm --env-file=.env $(APP_NAME):latest /bin/bash
+	docker run -it --rm --env-file=.env --entrypoint /bin/bash $(APP_NAME):latest
 
 run:
 	docker run --rm --env-file=.env $(APP_NAME):latest
