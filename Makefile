@@ -6,6 +6,7 @@ APP_VERSION=1.2
 
 build:
 	docker build \
+	--no-cache \
 	--build-arg OPENJDK_TAG=$(OPENJDK_TAG) \
 	--build-arg SBT_TAG=$(OPENJDK_TAG)_${SBT_VERSION} \
 	--build-arg ACCOUNT=$(ACCOUNT) \
