@@ -1,0 +1,3 @@
+department_id,location_id,date_start,date_end
+123456,ABCD,2020-07-01,2020-07-31
+#456789,EFGH,2020-10-01,2020-10-31
