@@ -4,16 +4,13 @@ ARG SBT_TAG=latest
 FROM mozilla/sbt:${SBT_TAG} AS build
 
 # build arguments that must be supplied during the build, as environment variables
-ARG ACCOUNT=account
-ARG TOKEN=token
+ARG REPO_URI="https://github.com/chop-dbhi/ped-screen"
 ARG BRANCH=branch
-# interpolate value
-ARG URI="https://$ACCOUNT:$TOKEN@github.com/chop-dbhi/ped-screen"
 
 WORKDIR /source
 
 # clone the remote repository's branch to /source
-RUN git clone $URI -b $BRANCH .
+RUN git clone $REPO_URI -b $BRANCH .
 
 # create "fat" .JAR file
 RUN sbt assembly
