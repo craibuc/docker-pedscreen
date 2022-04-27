@@ -5,8 +5,8 @@ A Docker container for the ped-screen application.
 
 ### Export environment variable for the build task
 ```bash
-export ACCOUNT=<github account>
-export TOKEN=<github personal-access token (PAT)>
+export GITHUB_ACCOUNT=<github account>
+export GITHUB_TOKEN=<github personal-access token (PAT)>
 export BRANCH=<github branch name>
 ```
 
@@ -23,8 +23,7 @@ $ cp .env.sample .env
 ### build the image
 ```bash
 $ docker build \
-	--build-arg ACCOUNT=$(ACCOUNT) \
-	--build-arg TOKEN=$(TOKEN) \
+	--build-arg REPO_URI="https://$(GITHUB_ACCOUNT):$(GITHUB_TOKEN)@github.com/chop-dbhi/ped-screen" \
 	--build-arg BRANCH=$(BRANCH) \
 	--tag pedscreen:latest \
 	.
