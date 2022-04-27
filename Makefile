@@ -4,7 +4,21 @@ SBT_VERSION=1.5.7
 APP_NAME=pedscreen
 APP_VERSION=1.2
 
+env_build:
+
+	# environment variables for build
+	@printenv | grep -E '(ACCOUNT|TOKEN|BRANCH)'
+
+env_run:
+
+	@echo -e '\n'
+	# environment variables for build
+	@printenv | grep -E '(CLARITY_URI|CLARITY_USER|CLARITY_PASSWORD|POSTGRES_URI|PEDSCREEN_USER|PEDSCREEN_PASSWORD)'
+
+env: env_build env_run
+
 build:
+	@echo 'Building image...'
 	docker build \
 	--no-cache \
 	--build-arg OPENJDK_TAG=$(OPENJDK_TAG) \
@@ -16,8 +30,16 @@ build:
 	--tag $(APP_NAME):latest \
 	.
 
+# https://docs.docker.com/engine/sbom/
+sbom:
+	@echo 'Generating software bill of materials...'
+	docker sbom $(APP_NAME):${APP_VERSION}
+
 tty:
+	@echo 'Starting terminal session...'
 	docker run -it --rm --env-file=.env --entrypoint /bin/bash $(APP_NAME):latest
 
 run:
-	docker run --rm --env-file=.env $(APP_NAME):latest
+	@echo 'Running container...'
+	# docker run --rm --env-file=.env $(APP_NAME):latest
+	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest --department_id 123456 --location_id ABCD --date_start 2020-01-01 --date_end 2020-01-31
