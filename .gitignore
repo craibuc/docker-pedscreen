@@ -1,9 +1,17 @@
 # docker-related
 .env
 !.env.sample
-initdb.sql
-!initdb.sample.sql
 docker-compose.yaml
 !.docker-compose.yaml
+
+# postgres
+initdb.sql
+!initdb.sample.sql
+
+# bash
+process.sh
+!process.sample.sh
+process.csv
+!process.sample.csv
 serial.sh
 !serial.sample.sh
