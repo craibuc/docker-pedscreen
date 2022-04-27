@@ -26,6 +26,7 @@ build:
 	--build-arg REPO_URI="https://$(GITHUB_ACCOUNT):$(GITHUB_TOKEN)@github.com/chop-dbhi/ped-screen" \
 	--build-arg BRANCH=$(BRANCH) \
 	--tag $(APP_NAME):${APP_VERSION} \
+	--tag ghcr.io/$(GITHUB_ACCOUNT)/$(APP_NAME) \
 	--tag $(APP_NAME):latest \
 	.
 
@@ -42,3 +43,8 @@ run:
 	@echo 'Running container...'
 	# docker run --rm --env-file=.env $(APP_NAME):latest
 	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest --department_id 123456 --location_id ABCD --date_start 2020-01-01 --date_end 2020-01-31
+
+publish:
+	@echo 'Publishing image to Github...'
+	echo $(GITHUB_TOKEN) | docker login ghcr.io -u GITHUB_ACCOUNT --password-stdin
+	docker push ghcr.io/$(GITHUB_ACCOUNT)/$(APP_NAME):latest
