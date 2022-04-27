@@ -7,7 +7,7 @@ APP_VERSION=1.2
 env_build:
 
 	# environment variables for build
-	@printenv | grep -E '(ACCOUNT|TOKEN|BRANCH)'
+	@printenv | grep -E '(GITHUB_ACCOUNT|GITHUB_TOKEN|BRANCH)'
 
 env_run:
 
@@ -23,8 +23,7 @@ build:
 	--no-cache \
 	--build-arg OPENJDK_TAG=$(OPENJDK_TAG) \
 	--build-arg SBT_TAG=$(OPENJDK_TAG)_${SBT_VERSION} \
-	--build-arg ACCOUNT=$(ACCOUNT) \
-	--build-arg TOKEN=$(TOKEN) \
+	--build-arg REPO_URI="https://$(GITHUB_ACCOUNT):$(GITHUB_TOKEN)@github.com/chop-dbhi/ped-screen" \
 	--build-arg BRANCH=$(BRANCH) \
 	--tag $(APP_NAME):${APP_VERSION} \
 	--tag $(APP_NAME):latest \
