@@ -15,3 +15,7 @@ process.csv
 !process.sample.csv
 serial.sh
 !serial.sample.sh
+
+# make
+Makefile
+!Makefile.sample
