@@ -2,8 +2,12 @@
 
 # Purpose:
 #   Generate the extracts for the prior month for the listed locations.
+#
 # Preparation:
-#   site and location variables with actual values
+#  - copy file to sample.sh ($ cp serial.sample.sh serial.sh)
+#  - make file executable ($ chmod +x serial.sh)
+#  - add specific site (e.g. AAAA,BBBB) and department # (e.g. 111111,222222) to the locations variable
+#
 # Usage:
 #   ./serial.sh
 
