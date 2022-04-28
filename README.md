@@ -1,26 +1,20 @@
 # docker-pedscreen
 A Docker container for the ped-screen application.
 
-## Prepare
+## Usage
 
-### Export environment variable for the build task
+### Build
+
+#### Export environment variables
+> NOTE: this could be added to `.bashrc` or `.profile`.
+
 ```bash
 export GITHUB_ACCOUNT=<github account>
 export GITHUB_TOKEN=<github personal-access token (PAT)>
 export BRANCH=<github branch name>
 ```
 
-### Create the environment file for the run task
-- Copy `.env.sample` to `.env`
-```bash
-$ cp .env.sample .env
-```
-- Edit the file and supply the missing values
-
-
-## Usage
-
-### build the image
+#### Build the image
 ```bash
 $ docker build \
 	--build-arg REPO_URI="https://$(GITHUB_ACCOUNT):$(GITHUB_TOKEN)@github.com/chop-dbhi/ped-screen" \
@@ -29,29 +23,47 @@ $ docker build \
 	.
 ```
 
-### run container and display ped-screen's parameters
+### Run
+
+#### Create the environment file
+This file contains the environment variables that are supplied to docker when the container is run.
+
+- Copy `.env.sample` to `.env`
+```bash
+$ cp .env.sample .env
+```
+- Edit the file and supply the missing values
+
+#### Run container and display ped-screen's parameters
 ```bash
 $ docker run --rm --env-file=.env pedscreen:latest
 ```
 
-### run container and display ped-screen's parameters
-```bash
-$ docker run --rm --env-file=.env pedscreen:latest --department_id 123456 --site_id ABCD --date_start 2019-03-31 --date_end 2019-03-31
-```
-## Make
-Use `make` to simplify the build/run process.
+#### Run container and generate the extract
 
-### build the image
+```bash
+$ docker run --rm --env-file=.env pedscreen:latest --location_id ABCD --department_id 123456 --date_start 2019-03-31 --date_end 2019-03-31
+```
+
+## Make
+Use `make` to simplify the build/run process; the project contains a sample `makefile`.
+
+### Build the image
 ```bash
 $ make build
 ```
 
-### run container and start terminal
+### Run container and create a terminal session
 ```bash
 $ make tty
 ```
 
-### run container and display ped-screen's parameters
+### Run container and display ped-screen's parameters
+```bash
+$ make param
+```
+
+### Run container and generate files
 ```bash
 $ make run
 ```
