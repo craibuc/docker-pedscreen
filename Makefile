@@ -1,3 +1,15 @@
+# Purpose:
+#   Contains Docker-related tasks.
+#
+# Prepare (done once):
+#  - Copy file to 'Makefile' ($ cp Makefile.sample Makefile)
+#
+# Usage:
+#  - $ make <task>
+#
+# Examples:
+#  - $ make build
+
 # variables
 OPENJDK_TAG=11.0.13
 SBT_VERSION=1.5.7
@@ -11,7 +23,7 @@ env_build:
 
 env_run:
 
-	@echo -e '\n'
+	@echo
 	# environment variables for build
 	@printenv | grep -E '(CLARITY_URI|CLARITY_USER|CLARITY_PASSWORD|POSTGRES_URI|PEDSCREEN_USER|PEDSCREEN_PASSWORD)'
 
@@ -38,6 +50,11 @@ sbom:
 tty:
 	@echo 'Starting terminal session...'
 	docker run -it --rm --env-file=.env --entrypoint /bin/bash $(APP_NAME):latest
+
+param:
+	@echo 'Running container...'
+	# docker run --rm --env-file=.env $(APP_NAME):latest
+	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest
 
 run:
 	@echo 'Running container...'
