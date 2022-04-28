@@ -53,12 +53,10 @@ tty:
 
 param:
 	@echo 'Running container...'
-	# docker run --rm --env-file=.env $(APP_NAME):latest
-	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest
+	docker run --rm --env-file=.env $(APP_NAME):latest
 
 run:
 	@echo 'Running container...'
-	# docker run --rm --env-file=.env $(APP_NAME):latest
 	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest --department_id 123456 --location_id ABCD --date_start 2020-01-01 --date_end 2020-01-31
 
 publish:
