@@ -8,6 +8,7 @@ docker-compose*
 
 # make
 Makefile
+Makefile.sample
 
 # misc
 LICENSE
@@ -15,6 +16,7 @@ README.md
 
 # bash
 serial*
+process.*
 
 # postgres
 postgres/*
