@@ -1,0 +1,67 @@
+# Purpose:
+#   Contains Docker-related tasks.
+#
+# Prepare (done once):
+#  - Copy file to 'Makefile' ($ cp Makefile.sample Makefile)
+#
+# Usage:
+#  - $ make <task>
+#
+# Examples:
+#  - $ make build
+
+# variables
+OPENJDK_TAG=11.0.13
+SBT_VERSION=1.5.7
+APP_NAME=pedscreen
+APP_VERSION=1.2
+
+env_build:
+
+	# environment variables for build
+	@printenv | grep -E '(GITHUB_ACCOUNT|GITHUB_TOKEN|BRANCH)'
+
+env_run:
+
+	@echo
+	# environment variables for build
+	@printenv | grep -E '(CLARITY_URI|CLARITY_USER|CLARITY_PASSWORD|POSTGRES_URI|PEDSCREEN_USER|PEDSCREEN_PASSWORD)'
+
+env: env_build env_run
+
+build:
+	@echo 'Building image...'
+	docker build \
+	--no-cache \
+	--build-arg OPENJDK_TAG=$(OPENJDK_TAG) \
+	--build-arg SBT_TAG=$(OPENJDK_TAG)_${SBT_VERSION} \
+	--build-arg REPO_URI="https://$(GITHUB_ACCOUNT):$(GITHUB_TOKEN)@github.com/chop-dbhi/ped-screen" \
+	--build-arg BRANCH=$(BRANCH) \
+	--tag $(APP_NAME):${APP_VERSION} \
+	--tag ghcr.io/$(GITHUB_ACCOUNT)/$(APP_NAME) \
+	--tag $(APP_NAME):latest \
+	.
+
+# https://docs.docker.com/engine/sbom/
+sbom:
+	@echo 'Generating software bill of materials...'
+	docker sbom $(APP_NAME):${APP_VERSION}
+
+tty:
+	@echo 'Starting terminal session...'
+	docker run -it --rm --env-file=.env --entrypoint /bin/bash $(APP_NAME):latest
+
+param:
+	@echo 'Running container...'
+	# docker run --rm --env-file=.env $(APP_NAME):latest
+	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest
+
+run:
+	@echo 'Running container...'
+	# docker run --rm --env-file=.env $(APP_NAME):latest
+	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest --department_id 123456 --location_id ABCD --date_start 2020-01-01 --date_end 2020-01-31
+
+publish:
+	@echo 'Publishing image to Github...'
+	echo $(GITHUB_TOKEN) | docker login ghcr.io -u GITHUB_ACCOUNT --password-stdin
+	docker push ghcr.io/$(GITHUB_ACCOUNT)/$(APP_NAME):latest
