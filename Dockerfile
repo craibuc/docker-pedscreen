@@ -12,6 +12,9 @@ WORKDIR /source
 # clone the remote repository's branch to /source
 RUN git clone $REPO_URI -b $BRANCH .
 
+# copy local settings files
+COPY *.properties ./conf/local/
+
 # create "fat" .JAR file
 RUN sbt assembly
 
