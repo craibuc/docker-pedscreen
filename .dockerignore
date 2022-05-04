@@ -23,3 +23,7 @@ postgres/*
 
 # pedscreen
 *.sample.properties
+
+# artifacts
+log/*
+output/*

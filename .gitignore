@@ -23,3 +23,7 @@ serial.sh
 # make
 Makefile
 !Makefile.sample
+
+# artifacts
+log/*
+output/*
