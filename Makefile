@@ -42,6 +42,18 @@ build:
 	--tag $(APP_NAME):latest \
 	.
 
+rebuild:
+	@echo 'Building image w/o pulling source...'
+	docker build \
+	--build-arg OPENJDK_TAG=$(OPENJDK_TAG) \
+	--build-arg SBT_TAG=${SBT_VERSION} \
+	--build-arg REPO_URI="https://$(GITHUB_ACCOUNT):$(GITHUB_TOKEN)@github.com/chop-dbhi/ped-screen" \
+	--build-arg BRANCH=$(BRANCH) \
+	--tag $(APP_NAME):${APP_VERSION} \
+	--tag ghcr.io/$(GITHUB_ACCOUNT)/$(APP_NAME) \
+	--tag $(APP_NAME):latest \
+	.
+
 # https://docs.docker.com/engine/sbom/
 sbom:
 	@echo 'Generating software bill of materials...'
@@ -57,7 +69,7 @@ param:
 
 run:
 	@echo 'Running container...'
-	docker run --rm --env-file=.env --volume $(pwd)/output:/app/output $(APP_NAME):latest --department_id 123456 --location_id ABCD --date_start 2020-01-01 --date_end 2020-01-31
+	docker run --rm --env-file=.env --volume $(PWD)/output:/app/output $(APP_NAME):latest --department_id 211500 --location_id CHAG --date_start 2020-03-14 --date_end 2020-03-14
 
 publish:
 	@echo 'Publishing image to Github...'
