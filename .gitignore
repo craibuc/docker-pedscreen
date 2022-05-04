@@ -4,6 +4,10 @@
 docker-compose.yaml
 !.docker-compose.yaml
 
+# pedscreen
+*.properties
+!*.sample.properties
+
 # postgres
 initdb.sql
 !initdb.sample.sql
