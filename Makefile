@@ -12,7 +12,7 @@
 
 # variables
 OPENJDK_TAG=11.0.13
-SBT_VERSION=1.5.7
+SBT_VERSION=1.6.1
 APP_NAME=pedscreen
 APP_VERSION=1.2
 
@@ -34,7 +34,7 @@ build:
 	docker build \
 	--no-cache \
 	--build-arg OPENJDK_TAG=$(OPENJDK_TAG) \
-	--build-arg SBT_TAG=$(OPENJDK_TAG)_${SBT_VERSION} \
+	--build-arg SBT_TAG=${SBT_VERSION} \
 	--build-arg REPO_URI="https://$(GITHUB_ACCOUNT):$(GITHUB_TOKEN)@github.com/chop-dbhi/ped-screen" \
 	--build-arg BRANCH=$(BRANCH) \
 	--tag $(APP_NAME):${APP_VERSION} \
