@@ -25,7 +25,7 @@
 # $ export DATE_END=2021/03/31
 
 # list all environment variables (for validation)
-# $ printevn
+# $ printenv
 
 # start all containers
 # $ docker-compose up -d
@@ -68,7 +68,8 @@ x-application: &application
         - ./.env
     volumes:
         # mount host directory to container
-        - /mnt/c/Users/[user name]/output:/app/output
+        - ./output:/app/output
+        - ./log:/app/log
 
         # use a shared volume (defined late in this document)
         # - pedscreen:/app/output
