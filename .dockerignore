@@ -20,3 +20,6 @@ process.*
 
 # postgres
 postgres/*
+
+# pedscreen
+*.sample.properties
