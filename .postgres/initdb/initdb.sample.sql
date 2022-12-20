@@ -8,7 +8,6 @@ Reference:
 */
 CREATE DATABASE pedscreen;
 
--- TODO: make use of PEDSCREEN_PASSWORD environment variable, specified in .env file
 CREATE USER pedscreen WITH PASSWORD '[password here]';
 
 GRANT ALL ON DATABASE pedscreen TO pedscreen;
