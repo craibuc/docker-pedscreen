@@ -1,4 +1,5 @@
 # git
+.git
 .gitignore
 
 # docker
@@ -19,9 +20,10 @@ serial*
 process.*
 
 # postgres
-postgres/*
+.postgres/*
 
 # pedscreen
+.pedscren/*
 *.sample.properties
 
 # artifacts
