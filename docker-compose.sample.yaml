@@ -55,7 +55,7 @@ x-database: &database
         retries: 10
     volumes:
         # copy the DB-initialization script (./initdb.sql) to the container
-        - .postgres/initdb/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+        - ./.postgres/initdb/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     restart: unless-stopped
 
 #
