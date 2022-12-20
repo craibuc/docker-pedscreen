@@ -45,17 +45,17 @@ version: "3.7"
 x-database: &database
     image: postgres:9.6.22
     env_file:
-        - ./postgres/.env
+        - ./.postgres/.env
     healthcheck:
-        # test: [ "CMD", "pg_isready", "-q", "-d", "${DATABASE_NAME}", "-U", "${DATABASE_USER}" ]
         # ensure that the database is ready for usage by the application
-        test: [ "CMD", "pg_isready", "-q", "-d", "pedscreen", "-U", "pedscreen" ]
+        # values for POSTGRES_DB and POSTGRES_USER are supplied by the .postgres/.env file
+        test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
         timeout: 45s
         interval: 10s
         retries: 10
     volumes:
         # copy the DB-initialization script (./initdb.sql) to the container
-        - ./postgres/initdb/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+        - .postgres/initdb/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     restart: unless-stopped
 
 #
@@ -70,17 +70,14 @@ x-application: &application
             - REPO_URI=https://${GITHUB_ACCOUNT}:${GITHUB_TOKEN}@github.com/chop-dbhi/ped-screen
             - GITHUB_BRANCH=${GITHUB_BRANCH}
         tags:
-            - pedscreen-win:latest
-            - ghcr.io/${GITHUB_ACCOUNT}/pedscreen-win  
+            - pedscreen:latest
+            # - ghcr.io/${GITHUB_ACCOUNT}/pedscreen
     env_file:
-        - .pedscreen/.env
+        - ./.pedscreen/.env
     volumes:
         # mount host directory to container
         - ./output:/app/output
         - ./log:/app/log
-
-        # use a shared volume (defined late in this document)
-        # - pedscreen:/app/output
 
 services:
 
@@ -141,22 +138,3 @@ services:
         depends_on:
             db2:
                 condition: service_healthy
-
-    #
-    # container w/ PSQL and access to data volume (for testing purposes)
-    #
-
-    # psql:
-    #     image: psql:latest
-    #     container_name: "psql"
-    #     env_file:
-    #         - ./pedscreen.env
-    #     stdin_open: true # docker run -i
-    #     tty: true        # docker run -t
-    #     volumes:
-    #         - /mnt/c/Users/[username]/Desktop/:/app/output
-            # - pedscreen:/app/output
-
-# volumes:
-#   pedscreen:
-#     external: true
