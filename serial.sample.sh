@@ -25,6 +25,6 @@ for location in "${!locations[@]}"; do
     # process ETL
     echo "Processing $location[${locations[$location]}] for ${date_start} to ${date_end}..."
 
-    docker run --rm --env-file=.env --volume $(pwd)/output:/app/output pedscreen:latest --site_id $site --department_id ${locations[$location]} --location_id ${location} --date_start ${date_start} --date_end ${date_end}
+    docker run --rm --env-file=.pedscreen/.env --volume $(pwd)/output:/app/output pedscreen:latest --site_id $site --department_id ${locations[$location]} --location_id ${location} --date_start ${date_start} --date_end ${date_end}
 
 done
