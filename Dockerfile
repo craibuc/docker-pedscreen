@@ -5,12 +5,13 @@ FROM mozilla/sbt:${SBT_TAG} AS build
 
 # build arguments that must be supplied during the build, as environment variables
 ARG REPO_URI="https://github.com/chop-dbhi/ped-screen"
-ARG BRANCH=branch
+ARG APP_VERSION=1.2
+ARG GITHUB_BRANCH=main
 
 WORKDIR /source
 
 # clone the remote repository's branch to /source
-RUN git clone $REPO_URI -b $BRANCH .
+RUN git clone $REPO_URI -b $GITHUB_BRANCH .
 
 # copy local settings files
 COPY ./conf/*.properties ./conf/local/
