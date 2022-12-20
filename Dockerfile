@@ -13,7 +13,7 @@ WORKDIR /source
 RUN git clone $REPO_URI -b $BRANCH .
 
 # copy local settings files
-COPY *.properties ./conf/local/
+COPY ./conf/*.properties ./conf/local/
 
 # create "fat" .JAR file
 RUN sbt assembly
